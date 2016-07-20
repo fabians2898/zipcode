@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My app</title>
+</head>
+<body>
+	<h1>hello word, ugly world</h1>
+
+	<form action="/" method="POST" enctype="multipart/form-data">
+ 	  {% csrf_token %}
+	  <input type="file" name="csv" accept=".csv">
+	  <input type="submit">
+	</form>
+
+</body>
+</html>
