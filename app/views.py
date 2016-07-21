@@ -39,10 +39,29 @@ class MainView(View):
 
 
 class ContactsView(View):
+    template_name = 'index.html'
     @csrf_exempt
     def post(self, request):
-        agent_one = request.POST['agent_one']
-        agent_two = request.POST['agent_two']
+        agent_one = request.POST['agent_one'][:2]
+        agent_two = request.POST['agent_two'][:2]
+
+        contacts_one = Contact.objects.filter(zip_code__startswith=agent_one)
+        contacts_two = Contact.objects.filter(zip_code__startswith=agent_two)
+
+        contacts_one = [[c.name, c.zip_code] for c in contacts_one]
+        contacts_two = [[c.name, c.zip_code] for c in contacts_two]
+
+        context = {
+            request.POST['agent_one']: contacts_one,
+            request.POST['agent_two']: contacts_two,
+        }
+
+        return TemplateResponse(request, self.template_name,
+            {'current_page': self.template_name, 
+            'contacts_info': context})
+
+
+
         
 
 

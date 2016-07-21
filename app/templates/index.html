@@ -2,16 +2,72 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<title>My app</title>
 </head>
 <body>
-	<h1>hello word, ugly world</h1>
+	<div class="row">
+		<div class="page-header col-md-6">
+		  <h1>New Contacts <small>load new contacts by .csv</small></h1>
+		</div>
+		<div class="page-header col-md-6">
+		  <h1>Search contacts <small>enter agents zip codes</small></h1>
+		</div>
+	</div>
 
-	<form action="/" method="POST" enctype="multipart/form-data">
- 	  {% csrf_token %}
-	  <input type="file" name="csv" accept=".csv">
-	  <input type="submit">
-	</form>
+	<div class="row">
+		<div class="jumbotron col-md-6">
+		  <div class="container">
+				<form action="/" method="POST" enctype="multipart/form-data">
+			 	  {% csrf_token %}
+				  <input type="file" name="csv" accept=".csv">
+				  <input type="submit">
+				</form>		  		
+		  </div>
+		</div>
+		<div class="jumbotron col-md-6">
+		  <div class="container">
+			<form action="contact-add/" method="POST">
+		 	  {% csrf_token %}
+		 	  <label>Agent n° 1:</label>
+			  <input type="number" min="10000" max="99999" name="agent_one">
+			  <label>Agent n° 2:</label>
+			  <input type="number" min="10000" max="99999" name="agent_two">
+			  <input type="submit">
+			</form>					  		
+		  </div>
+		  <br>
+		</div>
+	</div>
+
+	{% if contacts_info %}	
+		<div class="row">
+			{% for key,value in contacts_info.items %}
+				<div class="col-md-4 col-md-offset-1">
+				<h1><small>Agent ZIP code N°:{{key}}</small></h1>
+					{% if value %}
+						<table class="table table-hover">
+							<thead>
+								<th>Name</th>
+								<th>Zip Code</th>
+							</thead>
+						{% for contact in value %}
+							<tr>
+								{% for x in contact %}
+									<td>{{x}}</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+						</table>
+					{% else %}
+						<p>There is no contact</p>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}	
+
 
 </body>
 </html>
